@@ -1,12 +1,30 @@
 import React from "react";
 import Sidebar from "./Sidebar"
 import { FaUserCircle } from "react-icons/fa";
-import axios from "axios"
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import View from "./View"
+import axios from "axios";
 const FormTable = () => {
 
 
   const getUser = localStorage.getItem("user")
 
+  
+  const [data, setData] = useState([])
+
+  const handleGetAllData=()=>{
+    axios.get("http://localhost:3000/allrequests").then((response)=>{
+        setData(response.data)
+  
+    }).catch((error)=>{
+      console.log(error)
+    })
+  }
+
+  useEffect(()=>{
+    handleGetAllData()
+  },[])
 
 
 
@@ -14,6 +32,14 @@ const FormTable = () => {
   return (
     <div className="flex gap-10">
       <Sidebar />
+
+      {
+        data.map((item)=>{
+            return <View items={item} />
+        })
+      }
+
+
       <div className="w-full min-h-screen  ml-[18%] -[5%] bg-gradient-to-br  to-gray-100 p-8">
         {/* Page Title */}
         <h1 className="text-center text-3xl font-extrabold text-[#6a6458] pb-10">
@@ -41,8 +67,9 @@ const FormTable = () => {
             
 
             </div>
-
+            <Link to="/View">
             <h1 className="text-3xl ">View</h1>
+            </Link>
           </div>
 
         </div>
